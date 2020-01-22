@@ -19,7 +19,7 @@
   border-top: 1px solid #edf2f8;
   border-bottom: 1px solid white;
   cursor: pointer;
-  transition: border 1s;
+  transition: border 0.2s, font-weight 0.2s;
 
   &::before {
     display: inline;
@@ -28,6 +28,7 @@
 
   &:hover {
     border-bottom: 1px solid #646f74;
+    font-weight: bold;
   }
 
   &.expanded {
