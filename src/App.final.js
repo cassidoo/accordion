@@ -1,4 +1,4 @@
-import React, { Fragment, useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext } from "react";
 import { FaMountain, FaSkiing, FaWineGlassAlt } from "react-icons/fa";
 import Description from "./Description";
 import "./App.scss";
@@ -27,25 +27,22 @@ function Accordion({ data }) {
 }
 
 let AccordionContext = createContext();
-let AwarenessContext = createContext();
 
 function AccordionCC({ children }) {
   let [activeIndex, setActiveIndex] = useState(0);
   return (
-    <AccordionContext.Provider value={{ activeIndex, setActiveIndex }}>
-      <div data-accordion>
-        {children.map((child, index) => {
-          return (
-            <AwarenessContext.Provider
-              key={`section-${index}`}
-              value={{ index }}
-            >
-              {child}
-            </AwarenessContext.Provider>
-          );
-        })}
-      </div>
-    </AccordionContext.Provider>
+    <div data-accordion>
+      {children.map((child, index) => {
+        return (
+          <AccordionContext.Provider
+            key={`section-${index}`}
+            value={{ index, activeIndex, setActiveIndex }}
+          >
+            {child}
+          </AccordionContext.Provider>
+        );
+      })}
+    </div>
   );
 }
 
@@ -60,8 +57,7 @@ function Section({ children, disabled }) {
 }
 
 function Title({ children }) {
-  let { activeIndex, setActiveIndex } = useContext(AccordionContext);
-  let { index } = useContext(AwarenessContext);
+  let { index, activeIndex, setActiveIndex } = useContext(AccordionContext);
   let isActive = index === activeIndex;
   let { disabled } = useContext(SectionContext);
   return (
@@ -78,8 +74,7 @@ function Title({ children }) {
 }
 
 function Content({ children }) {
-  let { index } = useContext(AwarenessContext);
-  let { activeIndex } = useContext(AccordionContext);
+  let { index, activeIndex } = useContext(AccordionContext);
   let isActive = index === activeIndex;
   return (
     <div data-panel-content className={isActive ? "expanded" : ""}>
@@ -100,7 +95,7 @@ function App() {
             <Description city="dornbirn" />
           </Content>
         </Section>
-        <Section disabled>
+        <Section>
           <Title>
             Lech <FaSkiing />
           </Title>
@@ -109,12 +104,12 @@ function App() {
           </Content>
         </Section>
         <Section>
-          <Content>
-            <Description city="madrid" />
-          </Content>
           <Title>
             Madrid <FaWineGlassAlt />
           </Title>
+          <Content>
+            <Description city="madrid" />
+          </Content>
         </Section>
       </AccordionCC>
     </div>
