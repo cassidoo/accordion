@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, createContext, useContext } from "react";
 import { FaMountain, FaSkiing, FaWineGlassAlt } from "react-icons/fa";
 import "./App.scss";
 
@@ -9,7 +9,7 @@ function Accordion({ data }) {
       {data.map((tab, index) => {
         const isActive = index === activeIndex;
         return (
-          <Fragment key={index}>
+          <div data-section key={index}>
             <div
               data-panel-title
               className={isActive ? "expanded" : ""}
@@ -18,44 +18,98 @@ function Accordion({ data }) {
               <span>{tab.label}</span>
               <span>{tab.icon}</span>
             </div>
-            <div
-              data-panel-content
-              className={isActive ? "expanded" : ""}
-              onClick={() => setActiveIndex(index)}
-            >
-              {tab.content}
-            </div>
-          </Fragment>
+          </div>
         );
       })}
     </div>
   );
 }
 
-function App() {
-  const data = [
-    {
-      label: "Dornbirn",
-      icon: <FaMountain />,
-      content:
-        "Dornbirn is the largest city in Vorarlberg and the tenth largest in Austria. It is an important commercial and shopping centre."
-    },
-    {
-      label: "Lech",
-      icon: <FaSkiing />,
-      content:
-        "Lech am Arlberg is a mountain village and an exclusive ski resort in the Bludenz district in the Austrian state of Vorarlberg on the banks of the river Lech."
-    },
-    {
-      label: "Madrid",
-      icon: <FaWineGlassAlt />,
-      content: "Madrid is the capital and most populous city of Spain."
-    }
-  ];
+let AccordionContext = createContext();
+let AwarenessContext = createContext();
 
+function AccordionCC({ children }) {
+  let [activeIndex, setActiveIndex] = useState(0);
+  return (
+    <AccordionContext.Provider value={{ activeIndex, setActiveIndex }}>
+      <div data-accordion>
+        {children.map((child, index) => {
+          return (
+            <AwarenessContext.Provider
+              key={`section-${index}`}
+              value={{ index }}
+            >
+              {child}
+            </AwarenessContext.Provider>
+          );
+        })}
+      </div>
+    </AccordionContext.Provider>
+  );
+}
+
+let SectionContext = createContext();
+
+function Section({ children, disabled }) {
+  return (
+    <SectionContext.Provider value={{ disabled }}>
+      <div data-section>{children}</div>
+    </SectionContext.Provider>
+  );
+}
+
+function Title({ children }) {
+  let { activeIndex, setActiveIndex } = useContext(AccordionContext);
+  let { index } = useContext(AwarenessContext);
+  let isActive = index === activeIndex;
+  let { disabled } = useContext(SectionContext);
+  return (
+    <div
+      data-panel-title
+      onClick={() => {
+        if (!disabled) setActiveIndex(index);
+      }}
+      className={disabled ? "disabled" : isActive ? "expanded" : ""}
+    >
+      {children}
+    </div>
+  );
+}
+
+function Content({ children }) {
+  let { index } = useContext(AwarenessContext);
+  let { activeIndex } = useContext(AccordionContext);
+  let isActive = index === activeIndex;
+  return (
+    <div data-panel-content className={isActive ? "expanded" : ""}>
+      {children}
+    </div>
+  );
+}
+
+function App() {
   return (
     <div className="App">
-      <Accordion data={data} />
+      <AccordionCC>
+        <Section>
+          <Title>
+            Dornbirn <FaMountain />
+          </Title>
+          <Content>ajsdhla</Content>
+        </Section>
+        <Section disabled>
+          <Title>
+            Lech <FaSkiing />
+          </Title>
+          <Content>ajsdhla</Content>
+        </Section>
+        <Section>
+          <Title>
+            Madrid <FaWineGlassAlt />
+          </Title>
+          <Content>ajsdhla</Content>
+        </Section>
+      </AccordionCC>
     </div>
   );
 }

@@ -14,13 +14,40 @@
 [data-panel-title] {
   display: flex;
   justify-content: space-between;
-  padding: 15px;
+  padding: 15px 15px 15px 25px;
   background: white;
+  border-top: 1px solid #edf2f8;
   border-bottom: 1px solid white;
+  cursor: pointer;
   transition: border 1s;
+
+  &::before {
+    display: inline;
+    content: "+";
+  }
 
   &:hover {
     border-bottom: 1px solid #646f74;
+  }
+
+  &.expanded {
+    border-bottom: 1px solid #646f74;
+    &::before {
+      content: "-";
+    }
+  }
+
+  &.disabled {
+    background: #f3f6fc;
+    color: #99c9ff;
+    border: 1px solid #cee4fd;
+    cursor: not-allowed;
+    &::before {
+      content: "x";
+    }
+    &:hover {
+      border-bottom: 1px solid #cee4fd;
+    }
   }
 }
 
@@ -37,5 +64,6 @@
     height: auto;
     padding: 15px;
     font-size: 1em;
+    border-bottom: 1px solid #edf2f8;
   }
 }
