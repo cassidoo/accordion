@@ -1,0 +1,41 @@
+.App {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #646f74;
+}
+
+[data-accordion] {
+  margin: 0 auto;
+  width: 400px;
+}
+
+[data-panel-title] {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: white;
+  border-bottom: 1px solid white;
+  transition: border 1s;
+
+  &:hover {
+    border-bottom: 1px solid #646f74;
+  }
+}
+
+[data-panel-content] {
+  background: #edf2f8;
+  visibility: hidden;
+  height: 0;
+  padding: 0;
+  font-size: 0;
+  transition: height 0.2s, visibility 0.2s, padding 0.2s;
+
+  &.expanded {
+    visibility: visible;
+    height: auto;
+    padding: 15px;
+    font-size: 1em;
+  }
+}
