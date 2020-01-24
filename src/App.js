@@ -22,7 +22,6 @@ function Accordion({ data }) {
             <div
               data-panel-content
               className={isActive ? "expanded" : ""}
-              onClick={() => setActiveIndex(index)}
             >
               {tab.content}
             </div>
