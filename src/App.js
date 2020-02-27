@@ -1,5 +1,9 @@
 import React, { Fragment, useState } from "react";
-import { FaMountain, FaSkiing, FaWineGlassAlt } from "react-icons/fa";
+import {
+  FaHeart,
+  FaSkiing,
+  FaWineGlassAlt
+} from "react-icons/fa";
 import Description from "./Description";
 import "./App.scss";
 
@@ -35,9 +39,9 @@ function Accordion({ data }) {
 function App() {
   const data = [
     {
-      label: "Dornbirn",
-      icon: <FaMountain />,
-      content: <Description city="dornbirn" />
+      label: "Paris",
+      icon: <FaHeart />,
+      content: <Description city="paris" />
     },
     {
       label: "Lech",
@@ -59,3 +63,15 @@ function App() {
 }
 
 export default App;
+
+// function AccordionCC({ children }) {
+// }
+
+// function Section({ children, disabled }) {
+// }
+
+// function Title({ children }) {
+// }
+
+// function Content({ children }) {
+// }
